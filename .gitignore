@@ -1,5 +1,5 @@
 # Python
-__pycache__/
+**pycache**/
 *.py[cod]
 *.pyo
 
@@ -18,15 +18,23 @@ data/frames/
 data/processed/
 
 # Model weights
-models/
+models/*
+!models/README.md
 *.pth
 *.pt
 *.ckpt
 *.onnx
 *.safetensors
+*.npz
+*.pkl
+*.bin
 
 # Generated outputs
 outputs/
+*.obj
+*.ply
+*.glb
+*.gltf
 
 # IDE
 .vscode/
