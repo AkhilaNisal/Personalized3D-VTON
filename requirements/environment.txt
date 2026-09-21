@@ -1,14 +1,36 @@
 # Verified development environment
 # Conda environment: human3d
 
-Python 3.11
+Python 3.11.16
 PyTorch 2.11.0+cu128
+CUDA runtime reported by PyTorch: 12.8
 OpenCV 5.0.0
 NumPy 2.4.6
 Open3D 0.20.0
 trimesh 5.1.0
+SMPL-X 0.1.28
+SciPy 1.17.1
+Matplotlib 3.11.2
+Pillow 12.3.0
+tqdm 4.70.1
+PyYAML 6.0.3
+Jupyter 1.1.1
+ipykernel 7.3.0
+pytorch-lightning 2.6.6
+scikit-image 0.26.0
+einops 0.8.2
+timm 1.0.29
+dill 0.4.1
+pandas 3.0.6
+gdown 6.4.0
+webdataset 1.0.2
+yacs 0.1.8
+chumpy 0.71
 
-# Also verified in the working environment:
-# smplx
+# Verified hardware:
 # CUDA available through PyTorch: True
 # GPU: NVIDIA GeForce RTX 4050 Laptop GPU
+
+# HMR2 status:
+# hmr2 package: 0.0.0, imported from the local external/4D-Humans checkout
+# Detectron2: not installed

@@ -2,146 +2,175 @@
 
 **Personalized 3D Human Avatar for Real-Time Virtual Clothing Try-On**
 
-Research project by Akhila Nisal Wedamestrige, University of Moratuwa.
+Research project by **Akhila Nisal Wedamestrige**, University of Moratuwa, Department of Electronic and Telecommunication Engineering.
 
-## Overview
+- GitHub: [AkhilaNisal/Personalized3D-VTON](https://github.com/AkhilaNisal/Personalized3D-VTON)
+- Author profile: [https://github.com/AkhilaNisal](https://github.com/AkhilaNisal)
+- Portfolio: [https://akhilanisal.github.io/akhila-portfolio/](https://akhilanisal.github.io/akhila-portfolio/)
 
-Personalized3D-VTON investigates how a person's body shape and pose can be represented as a high-fidelity 3D human avatar and used as the body representation for realistic virtual clothing try-on.
+## Project Overview
 
-The long-term system is intended to use RGB images or video, estimate a person's body geometry and motion, represent the body with a parametric model, and fit garments to that body. The phrase *high-fidelity personalized 3D avatar* is used deliberately. RGB-based reconstruction cannot guarantee an exact physical digital twin, so the project will evaluate reconstruction quality rather than claim perfect physical recovery.
+This project aims to develop a personalized and realistic virtual clothing try-on system. The long-term concept is that a person stands in front of a camera and slowly rotates while RGB images or video are captured from multiple viewpoints. These observations are used to estimate body shape and anthropometric proportions, personalize a generic parametric human model, and eventually fit garments to the resulting body.
 
-## Research Motivation
+The intended output is a **high-fidelity personalized 3D human avatar**, also described as a personalized 3D digital human model. This wording is deliberate: RGB-based reconstruction cannot guarantee an absolutely exact physical digital twin. Reconstruction quality must therefore be measured and validated rather than assumed.
 
-Many image-based virtual try-on systems focus on producing a convincing dressed image. They can be less suitable when the goal is a reusable 3D body representation that supports different views, poses, garments, and time steps. Important challenges include:
+### Current Milestone
 
-- body-specific geometry and proportions;
-- reliable clothing fit for different body shapes;
-- loose, oversized, and tight garments;
-- garment deformation when the body moves;
-- stretching, hanging, folds, and body-garment contact;
-- consistent output across video frames; and
-- computational efficiency for a real-time, mirror-like experience.
+The current milestone is the SMPL-X foundation and parameter-control stage:
 
-This project begins with SMPL-X fundamentals and will progressively connect body reconstruction, anthropometric validation, garment representation, cloth deformation, and virtual try-on.
+```text
+SMPL-X model loading
+        |
+Neutral mesh generation
+        |
+Shape parameter beta experiments
+        |
+Pose parameter theta experiments
+        |
+Mesh export and visualization
+```
 
-## Main Research Idea
+The next technical milestone is to select and test a lightweight human pose/body estimation method, then fit its observations to SMPL-X. The current repository does not yet reconstruct a real person from RGB input, perform multi-view optimization, simulate clothing, or provide real-time virtual try-on.
+
+### Future Goal
+
+The future system should support body-specific clothing fit, body motion, garment deformation, folds, loose and oversized clothing, tight clothing, temporal consistency, and eventually a real-time mirror-like interface. These are planned research objectives, not completed functionality.
+
+## Current Research Direction
+
+The planned architecture is:
 
 ```text
 Multi-view RGB capture
         |
-Person segmentation and preprocessing
+Person detection / segmentation
         |
-Pose estimation and multi-view alignment
+Pose estimation
         |
-3D human body reconstruction
+Multi-view alignment
         |
-SMPL-X shape parameters beta
+SMPL-X reconstruction / fitting
+        |
+Body shape parameters beta
+        |
+Pose parameters theta
         |
 Personalized 3D human avatar
         |
 Anthropometric measurements
         |
-3D garment representation
+Detailed appearance / surface reconstruction
         |
-Garment fitting, deformation, and cloth simulation
+3D garment reconstruction and simulation
         |
-Pose-aware virtual try-on
-        |
-Real-time mirror-like output
+Virtual try-on
 ```
 
-The complete pipeline shown above is the research target. Only the SMPL-X environment, model loading, mesh generation, visualization, shape controls, and pose controls are currently implemented.
-
-## Current Development Status
-
-| Component | Status |
-| --- | --- |
-| Windows/Conda/Python development environment | Completed |
-| SMPL-X model loading | Completed |
-| PyTorch CUDA execution | Completed |
-| Neutral SMPL-X mesh generation | Completed |
-| SMPL-X mesh visualization | Completed |
-| Single beta shape experiment | Completed |
-| Independent beta 1-10 experiment | Completed |
-| Body pose theta experiment | Completed |
-| Single-image body estimation | Planned / next |
-| Multi-view body reconstruction | Planned |
-| Anthropometric validation | Planned |
-| Garment reconstruction | Planned |
-| Cloth deformation and simulation | Planned |
-| Pose-aware virtual try-on | Planned |
-| Temporal consistency | Planned |
-| Real-time optimization | Planned |
-
-### Verified Environment
-
-The current working environment is:
-
-- Operating system: Windows 11
-- Conda distribution: Miniconda
-- Conda environment: `human3d`
-- Python: 3.11
-- GPU: NVIDIA GeForce RTX 4050 Laptop GPU, approximately 6 GB VRAM
-- PyTorch: `2.11.0+cu128`
-- CUDA available through PyTorch: `True`
-- OpenCV: `5.0.0`
-- NumPy: `2.4.6`
-- Open3D: `0.20.0`
-- trimesh: `5.1.0`
-- smplx: installed and verified by the SMPL-X scripts
-
-The environment smoke test in `scripts/test.py` prints these dependency versions and confirms CUDA availability. The environment record is maintained in [requirements/environment.txt](requirements/environment.txt).
-
-## Completed Experiments
-
-### 1. Neutral SMPL-X Mesh
-
-`scripts/test_smplx.py`:
-
-- loads the neutral SMPL-X model;
-- selects CUDA when available;
-- creates a default neutral human with ten body shape parameters;
-- exports an OBJ mesh; and
-- reports the generated vertex and face dimensions.
-
-The generated mesh is `outputs/smplx_neutral.obj`. It was opened successfully with `scripts/view_smplx.py`, which uses Open3D for visualization.
-
-### 2. Single Shape Direction Experiment
-
-`scripts/explore_shape.py` varies only the first shape coefficient, beta 1, using:
+The immediate research path is:
 
 ```text
--3.0, -1.5, 0.0, +1.5, +3.0
+Multi-view images/video -> SMPL-X -> personalized body -> anthropometric measurements
 ```
 
-The remaining shape coefficients, pose, hand pose, jaw pose, eye pose, and expression are held at zero. The resulting meshes are written to `outputs/shape_experiment/` and can be viewed together with `scripts/view_shape_experiment.py`.
+Clothing reconstruction, cloth simulation, pose-aware garment deformation, and real-time virtual try-on are later stages.
 
-Beta directions are learned directions in the model's shape space. Beta 1 must not be described as directly meaning a physical property such as height, chest size, or fatness.
+## Development Status
 
-### 3. Independent Ten-Beta Experiment
+### Completed
 
-`scripts/explore_all_betas.py` changes beta 1 through beta 10 independently. For each generated mesh, one beta is set to `+3.0` and the other nine are zero. The results are written to `outputs/all_betas/` and viewed with `scripts/view_all_betas.py`.
+| Item | Evidence or status |
+| --- | --- |
+| Project directory and Git repository | Repository exists locally with Git metadata and GitHub project reference |
+| Conda environment | `human3d` environment is active and verified |
+| Python | 3.11.16 |
+| PyTorch and CUDA | PyTorch `2.11.0+cu128`; `torch.cuda.is_available()` is `True` |
+| GPU | NVIDIA GeForce RTX 4050 Laptop GPU detected by PyTorch |
+| Core libraries | OpenCV, NumPy, Open3D, trimesh, SciPy, and other documented packages verified |
+| SMPL-X Python package | `smplx 0.1.28` installed and used successfully |
+| Official SMPL-X model files | Downloaded separately and present locally; ignored by Git |
+| Basic SMPL-X loading | Neutral model loaded successfully with CUDA |
+| Default neutral mesh | Generated successfully with 10,475 vertices and 20,908 faces |
+| OBJ export | Neutral mesh exported to `outputs/smplx_neutral.obj` |
+| Open3D visualization | Generated mesh opened and visualized successfully |
+| Single-beta shape experiment | beta 1 tested at five values |
+| Ten-beta experiment | beta 1 through beta 10 tested independently |
+| Shape visualization | Shape results visualized with Open3D |
+| Pose experiment | Neutral, left-arm, and right-arm variations generated |
+| Pose visualization | Pose results visualized together with Open3D |
+| 4DHumans checkout | Repository cloned locally under `external/4D-Humans` |
+| HMR2 package import | Local `hmr2` package import verified |
+| HMR2 core setup | Core Python dependencies are installed in `human3d` |
+| chumpy | `0.71` installed successfully |
 
-This experiment is intended to build intuition about the independent learned shape directions. It is not a learned body measurement or a real-person reconstruction experiment.
+### Current / Partially Prepared
 
-### 4. Body Pose Experiment
+- The 4DHumans/HMR2 setup was investigated as a possible monocular body-estimation baseline.
+- The HMR2 package is available from the local editable checkout and imports successfully.
+- HMR2 predicts SMPL rather than SMPL-X, so it is being considered as a possible baseline, not necessarily the final body model.
+- The project is currently prioritizing a lightweight, understandable RGB-to-body-measurement-to-SMPL-X baseline.
 
-`scripts/explore_pose.py` keeps the shape coefficients at zero and changes body pose parameters. It generates:
+### Not Completed
 
-- neutral standing: `pose_1_neutral.obj`;
-- left-arm variation: `pose_2_left_arm.obj`; and
-- right-arm variation: `pose_3_right_arm.obj`.
+- Detectron2 is **not installed**.
+- The official 4DHumans demo depends on Detectron2.
+- The HMR2 model/checkpoint data was **not** fully downloaded.
+- The large `hmr2_data.tar.gz` download was intentionally stopped and removed.
+- HMR2 inference has **not** been verified.
+- 4DHumans inference is **not** working or claimed as completed.
+- No single-image body estimator is integrated into this project.
+- No multi-view reconstruction or body-shape optimization is implemented.
+- No anthropometric validation, garment reconstruction, cloth simulation, or real-time VTON is implemented.
 
-The outputs are stored in `outputs/pose_experiment/` and viewed together with `scripts/view_pose_experiment.py`. This establishes the conceptual distinction between:
+## Verified Environment
 
-- `beta`: body shape; and
-- `theta`: body pose.
+The active `human3d` environment was inspected directly on Windows. The verified software versions are:
 
-These experiments control model parameters directly. They do not estimate a real person's parameters from RGB images.
+| Component | Verified value |
+| --- | --- |
+| Python | 3.11.16 |
+| PyTorch | 2.11.0+cu128 |
+| CUDA runtime reported by PyTorch | 12.8 |
+| CUDA available | `True` |
+| GPU | NVIDIA GeForce RTX 4050 Laptop GPU |
+| OpenCV | 5.0.0 |
+| NumPy | 2.4.6 |
+| Open3D | 0.20.0 |
+| trimesh | 5.1.0 |
+| SMPL-X | 0.1.28 |
+| SciPy | 1.17.1 |
+| Matplotlib | 3.11.2 |
+| Pillow | 12.3.0 |
+| tqdm | 4.70.1 |
+| PyYAML | 6.0.3 |
+| Jupyter | 1.1.1 |
+| ipykernel | 7.3.0 |
+| pytorch-lightning | 2.6.6 |
+| scikit-image | 0.26.0 |
+| einops | 0.8.2 |
+| timm | 1.0.29 |
+| dill | 0.4.1 |
+| pandas | 3.0.6 |
+| gdown | 6.4.0 |
+| webdataset | 1.0.2 |
+| yacs | 0.1.8 |
+| chumpy | 0.71 |
 
-## SMPL-X Model and Parameters
+The full environment record is in [requirements/environment.txt](requirements/environment.txt).
 
-SMPL-X is a parametric 3D human body model with expressive body, hand, face, and eye components. A simplified notation for its output is:
+## Hardware and Software Environment
+
+- Laptop: ASUS TUF F15 FX507ZU
+- Operating system: Windows 11
+- GPU: NVIDIA GeForce RTX 4050 Laptop GPU, approximately 6 GB VRAM
+- Development distribution: Miniconda
+- Conda environment: `human3d`
+- Project path: `D:\Personalized3D-VTON`
+
+## SMPL-X Model
+
+SMPL-X, or Skinned Multi-Person Linear model with eXpressive hands and face, is a parametric 3D human body model. It is not a scan of a specific person. Instead, it provides a learned, parameterized representation that generates a human mesh from shape, pose, and expression parameters.
+
+Conceptually, the generated mesh can be written as:
 
 ```text
 M(beta, theta, psi)
@@ -149,27 +178,214 @@ M(beta, theta, psi)
 
 where:
 
-- `beta` represents learned body shape directions;
-- `theta` represents body pose, including body joint rotations; and
-- `psi` represents facial expression parameters.
+- `beta` (`β`) represents body shape;
+- `theta` (`θ`) represents body and joint pose; and
+- `psi` (`ψ`) represents facial expression.
 
-The current scripts use ten body shape coefficients, zero expression, zero hand pose, zero jaw and eye pose, and controlled body pose values. Future personalization will require estimating suitable parameters from observations of a particular person and validating the resulting geometry against measurements or multi-view evidence.
+The beta values are learned shape directions. They should not be described as directly corresponding to physical properties such as “fatness”, “chest size”, or “height”. Physical measurements must be estimated and validated separately.
 
-## Project Structure
+The locally used official model files are:
+
+```text
+models/smplx/official/smplx/
+├── SMPLX_FEMALE.npz
+├── SMPLX_MALE.npz
+└── SMPLX_NEUTRAL.npz
+```
+
+The official model weights are not redistributed by this repository. Obtain them from the [official SMPL-X website](https://smpl-x.is.tue.mpg.de/) and comply with its license and download terms. The files are ignored by Git because of their size and licensing restrictions.
+
+## Completed Experiments
+
+### `scripts/test_smplx.py`
+
+Loads the neutral SMPL-X model, selects CUDA when available, generates a default neutral human, and exports an OBJ mesh.
+
+Verified result:
+
+- vertices: `(10475, 3)`;
+- faces: `(20908, 3)`; and
+- output: `outputs/smplx_neutral.obj`.
+
+### `scripts/view_smplx.py`
+
+Loads `outputs/smplx_neutral.obj`, computes vertex normals, and visualizes the generated mesh using Open3D.
+
+### `scripts/explore_shape.py`
+
+Tests how changing one learned shape direction affects the generated body. Only beta 1 is changed, using:
+
+```text
+-3.0
+-1.5
+ 0.0
++1.5
++3.0
+```
+
+The other shape and pose parameters remain at zero. Outputs are written to `outputs/shape_experiment/`.
+
+### `scripts/view_shape_experiment.py`
+
+Loads the five beta 1 meshes, separates them spatially, and visualizes the shape experiment using Open3D.
+
+### `scripts/explore_all_betas.py`
+
+Tests beta 1 through beta 10 independently. Each run sets one beta parameter to `+3.0` and keeps the other nine at zero. Outputs are written to `outputs/all_betas/`.
+
+### `scripts/view_all_betas.py`
+
+Loads the ten individual beta experiment meshes, arranges them in two rows, and visualizes them using Open3D.
+
+### `scripts/explore_pose.py`
+
+Demonstrates that pose can be changed independently from body shape. It generates:
+
+- `pose_1_neutral.obj`;
+- `pose_2_left_arm.obj`; and
+- `pose_3_right_arm.obj`.
+
+Outputs are written to `outputs/pose_experiment/`.
+
+### `scripts/view_pose_experiment.py`
+
+Loads the three pose meshes, arranges them horizontally, and visualizes the pose experiment using Open3D.
+
+### `scripts/test.py`
+
+Prints the installed versions of PyTorch, OpenCV, NumPy, Open3D, and trimesh, then reports CUDA availability and the detected GPU.
+
+## 4DHumans / HMR2 Status
+
+A local checkout of the 4DHumans repository is present at:
+
+```text
+external/4D-Humans
+```
+
+The local Python package was installed in editable mode, core dependencies were installed, and the `hmr2` package import was verified. The installed package metadata reports `hmr2 0.0.0` from the local checkout.
+
+This is **not** a working HMR2 inference pipeline. The current status is:
+
+| HMR2 item | Status |
+| --- | --- |
+| 4DHumans repository checkout | Completed locally |
+| Editable package setup | Completed locally |
+| Core Python dependency setup | Completed |
+| `hmr2` package import | Verified |
+| Detectron2 | Not installed |
+| HMR2 checkpoint/model archive | Not fully downloaded |
+| `hmr2_data.tar.gz` | Download intentionally stopped and removed |
+| HMR2 inference | Not verified |
+| Official 4DHumans demo | Not working / not claimed complete |
+
+The official demo depends on Detectron2, which is missing in the current environment. A setup attempt also encountered a `pyrender`/OpenGL/EGL issue on Windows before model inference. This should not be interpreted as a failure of the RTX 4050 or CUDA installation: PyTorch CUDA and SMPL-X work correctly.
+
+The HMR2 archive is not part of the normal setup instructions in this README. No large checkpoint download should be started automatically.
+
+HMR2 predicts SMPL, while this project currently uses SMPL-X. HMR2 is therefore being considered as a possible baseline for body estimation, not as the final representation or an already integrated component.
+
+## Current Model Strategy
+
+The project will not depend immediately on a large model such as HMR2. The first goal is a lightweight and understandable baseline:
+
+```text
+RGB image/video
+        |
+Human pose or body landmarks
+        |
+Body measurements
+        |
+SMPL-X parameter fitting
+        |
+Personalized 3D body
+```
+
+A lightweight pose estimator such as MediaPipe Pose may be evaluated in future work, followed by optimization or fitting of SMPL-X. MediaPipe has not been installed or implemented in this repository and is only a candidate approach.
+
+## Installation and Environment Setup
+
+The current project uses the `human3d` Conda environment. The base environment can be created with:
+
+```powershell
+conda create -n human3d python=3.11 -y
+conda activate human3d
+```
+
+The environment has already been prepared and verified locally. The major installed packages are recorded in [requirements/environment.txt](requirements/environment.txt), including PyTorch, OpenCV, NumPy, Open3D, trimesh, SMPL-X, SciPy, chumpy, and the packages used while investigating HMR2.
+
+If Jupyter is needed in this environment, the verified kernel registration command is:
+
+```powershell
+python -m ipykernel install --user --name human3d --display-name "Python (human3d)"
+```
+
+The SMPL-X files must be obtained separately and placed in `models/smplx/official/smplx/`. The normal setup does not download the HMR2 archive, Detectron2, private datasets, or any other large model weights.
+
+## Verification
+
+Run the existing project smoke test from `D:\Personalized3D-VTON`:
+
+```powershell
+python scripts\test.py
+```
+
+A compact direct environment check is:
+
+```powershell
+python -c "import sys, torch, cv2, numpy, trimesh, smplx; print(sys.version); print('PyTorch:', torch.__version__); print('CUDA:', torch.cuda.is_available()); print('GPU:', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU'); print('OpenCV:', cv2.__version__); print('NumPy:', numpy.__version__); print('trimesh:', trimesh.__version__); print('SMPL-X: imported')"
+```
+
+Verified result for the current environment:
+
+```text
+Python 3.11.16
+PyTorch 2.11.0+cu128
+CUDA: True
+GPU: NVIDIA GeForce RTX 4050 Laptop GPU
+OpenCV: 5.0.0
+NumPy: 2.4.6
+trimesh: 5.1.0
+SMPL-X: imported
+```
+
+To verify the core SMPL-X result:
+
+```powershell
+python scripts\test_smplx.py
+```
+
+This currently produces a mesh with 10,475 vertices and 20,908 faces and exports `outputs/smplx_neutral.obj`.
+
+## Windows Technical Notes
+
+- Some 4DHumans code expects a `HOME` environment variable, which Windows does not always provide in the same way as Unix systems. The workaround used for the current PowerShell session was:
+
+  ```powershell
+  $env:HOME = $env:USERPROFILE
+  ```
+
+- SMPL-X currently runs successfully on the RTX 4050 through PyTorch CUDA.
+- The HMR2 setup encountered a `pyrender`/OpenGL/EGL issue on Windows before model inference. This is separate from the working CUDA and SMPL-X setup.
+- Detectron2 is not installed.
+- The large HMR2 archive download was stopped because it was too large for the current workflow.
+
+## Repository Structure
 
 ```text
 Personalized3D-VTON/
 ├── README.md
+├── SMPL-X.md
 ├── .gitignore
 ├── data/
-│   ├── raw/                  # Input data; do not commit private datasets
-│   ├── frames/               # Extracted video frames
-│   └── processed/            # Preprocessed data
+│   ├── raw/                  # Raw/private input data; ignored by Git
+│   ├── frames/               # Extracted frames; ignored by Git
+│   └── processed/            # Preprocessed data; ignored by Git
 ├── models/
 │   ├── README.md             # SMPL-X download and license instructions
 │   └── smplx/
 │       └── official/
-│           └── smplx/        # Local SMPL-X files
+│           └── smplx/        # Local SMPL-X model files; ignored by Git
 ├── scripts/
 │   ├── test.py
 │   ├── test_smplx.py
@@ -180,155 +396,110 @@ Personalized3D-VTON/
 │   ├── view_all_betas.py
 │   ├── explore_pose.py
 │   └── view_pose_experiment.py
-├── notebooks/                # Reserved for exploratory notebooks
-├── outputs/                  # Generated experiment meshes and results
-│   ├── shape_experiment/
-│   ├── all_betas/
-│   └── pose_experiment/
+├── notebooks/                # Notebook workspace
+├── outputs/                  # Generated meshes; ignored by Git
+├── external/
+│   └── 4D-Humans/            # Local external checkout; ignored by Git
 └── requirements/
-    └── environment.txt
+    └── environment.txt      # Verified environment record
 ```
-
-The repository also contains local `.vscode/` configuration and downloaded model/output artifacts. These are development artifacts, not research source code.
-
-## Installation
-
-The following instructions describe the tested Conda environment. Do not recreate an existing working environment unless necessary.
-
-### 1. Create and activate the Conda environment
-
-```powershell
-conda create -n human3d python=3.11 -y
-conda activate human3d
-```
-
-### 2. Install dependencies
-
-Install the PyTorch CUDA build appropriate for the machine using the official PyTorch selector at [pytorch.org/get-started/locally](https://pytorch.org/get-started/locally/). For the currently verified build, the command is:
-
-```powershell
-python -m pip install torch==2.11.0 --index-url https://download.pytorch.org/whl/cu128
-python -m pip install opencv-python numpy open3d trimesh smplx
-```
-
-Package versions verified in this project are listed in [requirements/environment.txt](requirements/environment.txt). A separate CUDA Toolkit installation is not required when the PyTorch package provides the required CUDA runtime.
-
-### 3. Download SMPL-X model files
-
-The official SMPL-X weights are not redistributed in this repository. Download them from the [official SMPL-X website](https://smpl-x.is.tue.mpg.de/) and follow the applicable license and download terms.
-
-Place the files in this local directory:
-
-```text
-models/smplx/official/smplx/
-├── SMPLX_NEUTRAL.npz
-├── SMPLX_MALE.npz
-└── SMPLX_FEMALE.npz
-```
-
-The `.npz` model files are large and license-restricted. Do not upload them to GitHub. See [models/README.md](models/README.md) for the same model setup instructions.
-
-## Verify the Environment and GPU
-
-From the repository root:
-
-```powershell
-python scripts\test.py
-```
-
-The direct CUDA check is:
-
-```powershell
-python -c "import torch; print(torch.cuda.is_available()); print(torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU')"
-```
-
-Expected current result includes `True` and `NVIDIA GeForce RTX 4050 Laptop GPU`.
-
-## Running the Experiments
-
-Run commands from the repository root. Generation scripts create directories under `outputs/`. Visualization scripts open interactive Open3D windows and require a graphical desktop session.
-
-```powershell
-python scripts\test_smplx.py
-python scripts\view_smplx.py
-
-python scripts\explore_shape.py
-python scripts\view_shape_experiment.py
-
-python scripts\explore_all_betas.py
-python scripts\view_all_betas.py
-
-python scripts\explore_pose.py
-python scripts\view_pose_experiment.py
-```
-
-Run `scripts/test.py` separately when checking the environment. The scripts currently use the repository path `D:\Personalized3D-VTON` internally, so update that path if the project is moved to another location.
 
 ## Research Roadmap
 
-### Stage 1 - SMPL-X Fundamentals: Completed
+### Phase 1 - SMPL-X Foundation: **COMPLETED**
 
-Model loading, CUDA execution, neutral mesh generation, Open3D visualization, independent beta experiments, and controlled pose experiments have been completed.
+- Install and verify the Python/CUDA environment.
+- Obtain and load the official SMPL-X model.
+- Generate and export a neutral mesh.
+- Visualize the mesh with Open3D.
+- Explore learned beta shape directions.
+- Explore theta pose parameters.
 
-### Stage 2 - Single-Image 3D Human Estimation: Planned / Next
+### Phase 2 - Single-Image Body Estimation: **NEXT**
 
-Evaluate an established monocular human reconstruction method such as 4DHumans/HMR2 or PARE and study how its output can initialize SMPL-X parameters.
+- Select a lightweight pose/body estimator.
+- Test it on a real human image.
+- Estimate body landmarks.
+- Fit or optimize SMPL-X parameters.
 
-### Stage 3 - Anthropometric Measurement Extraction: Planned
+### Phase 3 - Multi-View Reconstruction: **PLANNED**
 
-Define measurements, derive them from reconstructed vertices or joints, and compare them against reference measurements where available.
+- Capture multiple viewpoints while a person rotates.
+- Detect and segment the person.
+- Align the views.
+- Estimate a consistent body shape.
+- Optimize shared beta parameters across views.
 
-### Stage 4 - Multi-View RGB Capture and Body-Shape Optimization: Planned
+### Phase 4 - Anthropometric Measurement: **PLANNED**
 
-Capture synchronized or carefully aligned views, estimate pose, and optimize body shape against multiple observations rather than a single image.
+- Extract height, shoulder width, torso dimensions, limb lengths, and waist/hip-related measurements.
+- Define the measurement protocol.
+- Validate estimates against real measurements.
 
-### Stage 5 - High-Fidelity Personalized Avatar: Planned
+### Phase 5 - Detailed Personalized Avatar: **PLANNED**
 
-Evaluate shape consistency, pose consistency, surface quality, and measurement accuracy for a selected subject.
+- Improve surface geometry.
+- Investigate texture and appearance.
+- Add hair, head, or face detail if required by the research scope.
 
-### Stage 6 - 3D Garment Representation: Planned
+### Phase 6 - Garment Modeling: **PLANNED**
 
-Represent garments as 3D meshes or another suitable structured representation with garment-specific dimensions and material properties.
+- Build a 3D garment representation.
+- Fit garments to the personalized body.
+- Model cloth deformation, folds, and body contact.
+- Evaluate loose, oversized, and tight garments.
 
-### Stage 7 - Garment-Body Interaction and Cloth Deformation: Planned
+### Phase 7 - Real-Time Virtual Try-On: **PLANNED**
 
-Study fitting, collision handling, stretching, hanging, folds, and deformation for loose and tight garments across body shapes and poses.
-
-### Stage 8 - Pose-Aware Virtual Try-On: Planned
-
-Transfer garments onto the personalized avatar and render the result under changed poses and viewpoints.
-
-### Stage 9 - Temporal Consistency: Planned
-
-Measure stability across video frames and reduce jitter, flicker, and inconsistent garment motion.
-
-### Stage 10 - Real-Time Optimization: Planned
-
-Profile the pipeline, reduce latency and memory use, and evaluate whether a mirror-like experience is practical on the target hardware.
+- Track pose in real time.
+- Maintain temporal consistency.
+- Use garment simulation or learned deformation.
+- Build a camera or mirror interface.
 
 ## Research Questions
 
 1. How accurately can SMPL-X body shape parameters be estimated from RGB imagery?
 2. How much does multi-view capture improve personalized body reconstruction compared with a single image?
-3. How accurately can anthropometric measurements be extracted from a reconstructed body?
+3. How accurately can anthropometric measurements be extracted from the reconstructed body?
 4. How can a personalized body representation improve virtual clothing fit?
 5. How can garment deformation be modeled for different body shapes and poses?
-6. How can the system maintain temporal consistency for real-time video?
+6. How can temporal consistency be maintained for real-time video?
 7. What accuracy and latency trade-offs are acceptable for a practical virtual try-on system?
 
-## Limitations and Scope
+## Limitations
 
 - RGB images do not guarantee exact physical body geometry.
-- SMPL-X is a learned parametric representation, not a direct physical scan.
-- The initial experiments use a neutral body model and manually controlled parameters.
-- Current experiments are parameter-control experiments, not real-person reconstruction.
-- No single-image estimator, multi-view optimizer, or anthropometric validation module is implemented yet.
-- Garment reconstruction, cloth simulation, pose-aware VTON, temporal consistency, and real-time operation are not implemented yet.
+- SMPL-X is a learned parametric representation, not a direct scan of a person.
+- Current SMPL-X experiments use manually controlled parameters and a neutral body model.
+- The current experiments do not reconstruct a real person from RGB imagery.
+- HMR2 has not completed checkpoint setup or inference verification.
+- Detectron2 is not installed.
+- Garment reconstruction, cloth simulation, temporal consistency, and real-time operation are not implemented.
 - Model weights, private photographs, private datasets, and large generated outputs must not be committed.
 
-## Reproducibility and Data Policy
+## Model File and Git Safety
 
-Keep downloaded model weights in the local `models/` directory and keep raw or personal data under `data/raw/`. Do not commit personal photographs, private datasets, or restricted model files. Generated meshes and experiment outputs should be reviewed before committing because they can be large and are not source code. Record new experiments with their parameter values, input data description, software versions, and output location.
+The root `.gitignore` excludes new files matching:
+
+```text
+models/*
+*.npz
+*.pkl
+*.pth
+*.pt
+*.ckpt
+*.onnx
+*.safetensors
+outputs/
+data/raw/
+data/frames/
+data/processed/
+external/
+```
+
+It also excludes Python caches, virtual environments, Jupyter checkpoints, IDE settings, logs, and common generated mesh formats. `models/README.md` remains available for setup instructions while the downloaded SMPL-X weights remain ignored. The local `external/4D-Humans` checkout is also ignored because it is a separate external repository.
+
+The current Git index already contains the generated OBJ meshes from the completed experiments. They were not removed in this documentation update because they are existing research artifacts and working outputs. No SMPL-X `.npz` weights, HMR2 archives, or private datasets are tracked. A future repository cleanup can remove the generated meshes from the index separately if a smaller source-only repository is desired.
 
 ## References
 
@@ -343,16 +514,9 @@ Keep downloaded model weights in the local `models/` directory and keep raw or p
 - [StableVITON](https://github.com/rlawjdghek/StableVITON)
 - [OOTDiffusion](https://github.com/levihsu/OOTDiffusion)
 - [CatVTON](https://github.com/Zheng-Chong/CatVTON)
-- [DPIDM and related 3D human research](https://github.com/tencent-ailab/3dgrids)
 
-These references provide related body reconstruction, human parsing, image-based try-on, and 3D human modeling directions. They are research context, not claims that these systems are already integrated into this repository.
+These references provide research context. They are not claims that the listed systems are integrated or working in this repository.
 
-## Author
+## Current Status
 
-**Akhila Nisal Wedamestrige**
-
-University of Moratuwa
-Department of Electronic and Telecommunication Engineering
-
-- GitHub: [https://github.com/AkhilaNisal](https://github.com/AkhilaNisal)
-- Portfolio: [https://akhilanisal.github.io/akhila-portfolio/](https://akhilanisal.github.io/akhila-portfolio/)
+The SMPL-X foundation and parameter experiments are working and verified on the RTX 4050. The current research direction is moving from controlled SMPL-X experiments toward a lightweight RGB human pose/body estimation baseline. The next technical milestone is selecting and testing that method, then fitting its observations to SMPL-X and validating the resulting personalized body with anthropometric measurements.

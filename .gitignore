@@ -1,5 +1,6 @@
 # Python
-**pycache**/
+__pycache__/
+**/__pycache__/
 *.py[cod]
 *.pyo
 
@@ -30,11 +31,14 @@ models/*
 *.bin
 
 # Generated outputs
-# outputs/
-# *.obj
-# *.ply
-# *.glb
-# *.gltf
+outputs/
+*.obj
+*.ply
+*.glb
+*.gltf
+
+# External repositories and their generated environments
+external/
 
 # IDE
 .vscode/
