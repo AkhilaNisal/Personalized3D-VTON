@@ -30,11 +30,11 @@ models/*
 *.bin
 
 # Generated outputs
-outputs/
-*.obj
-*.ply
-*.glb
-*.gltf
+# outputs/
+# *.obj
+# *.ply
+# *.glb
+# *.gltf
 
 # IDE
 .vscode/
