@@ -13,10 +13,10 @@ ENV/
 # Jupyter
 .ipynb_checkpoints/
 
-# Data
-data/raw/
-data/frames/
-data/processed/
+# # Data
+# data/raw/
+# data/frames/
+# data/processed/
 
 # Model weights
 models/*
@@ -31,14 +31,14 @@ models/*
 *.bin
 
 # Generated outputs
-outputs/
-*.obj
-*.ply
-*.glb
-*.gltf
+# outputs/
+# *.obj
+# *.ply
+# *.glb
+# *.gltf
 
 # External repositories and their generated environments
-external/
+# external/
 
 # IDE
 .vscode/
